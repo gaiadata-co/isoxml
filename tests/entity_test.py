@@ -1,8 +1,7 @@
 ''' Test cases for isoxml.entity '''
 import pytest
 
-from isoxml import entity
-from isoxml import exception
+import isoxml
 
 valid = {}
 
