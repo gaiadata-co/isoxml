@@ -6,11 +6,11 @@ import isoxml
 import xml
 
 data = "<ISO11783_TaskData> ... </ISO11783_TaskData>"
-element = xml.etree.ElementTree.fromstring(data)
-entity = isoxml.Entity(element)
+entity = isoxml.Entity(data)
 
 """
 import re
+import xml
 
 tags = [
     "AFE", "ASP", "BSN", "CAN", "CAT", "CCG", "CCL", "CCT", "CLD", "CNN",
@@ -626,7 +626,8 @@ class Entity:
     attributes and child entities.
 
     '''
-    def __init__(self, element):
+    def __init__(self, data):
+        element = xml.etree.ElementTree.fromstring(data)
         self.element = element
         self.parse()
 
