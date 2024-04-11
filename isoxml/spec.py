@@ -461,7 +461,7 @@ PLN_map = {
     "D": "Color",
     "E": "Id",
 }
-PLN_ctags = []
+PLN_ctags = ["LSG"]
 
 PNT_required = ["Type", "North", "East" ]
 PNT_map = {
