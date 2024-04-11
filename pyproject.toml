@@ -3,7 +3,7 @@ requires = ["setuptools>=69.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "isoxml_gaiadata"
+name = "isoxml"
 version = "0.1.0"
 authors = [
   { name="Omar Shorbaji", email="omar@gaiadata.co" },
