@@ -101,8 +101,3 @@ def test_entity():
     for tag, xml in valid.items():
         e = entity.Entity(xml)
         assert e.tag() == tag
-
-def test_child(): 
-    e = entity.Entity(full)
-    print(e)
-    assert False
