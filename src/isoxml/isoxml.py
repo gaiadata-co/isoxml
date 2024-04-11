@@ -3,10 +3,9 @@
 Typical usage example:
 
 import isoxml
-import xml
 
-data = "<ISO11783_TaskData> ... </ISO11783_TaskData>"
-entity = isoxml.Entity(data)
+Enitiy.init()
+entity = isoxml.Entity("<ISO11783_TaskData> ... </ISO11783_TaskData>")
 
 """
 import re
@@ -627,12 +626,11 @@ class Entity:
 
     '''
     def __init__(self, data):
-        element = xml.etree.ElementTree.fromstring(data)
-        self.element = element
+        self.element = xml.etree.ElementTree.fromstring(data)
         self.parse()
 
     @classmethod
-    def init_spec(cls):
+    def init(cls):
         ''' Initialize the spec for the entities (REQUIRED)
         '''
         cls.spec = init_spec()
