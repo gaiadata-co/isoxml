@@ -1,2 +1,2 @@
-# isoxml.py
-ISOXML library in Python
+# isoxml
+ISOXML library 

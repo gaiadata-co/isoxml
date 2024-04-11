@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "isoxml"
+version = "0.1.0"
+authors = [
+  { name="Omar Shorbaji", email="omar@gaiadata.co" },
+]
+description = "ISOXML library"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/gaiadata-co/isoxml.py"
+Issues = "https://github.com/gaiadata-co/isoxml.py/issues"
+
+[tool.pytest.ini_options]
+addopts = [ "--import-mode=importlib", ]
+testpaths = ["tests"]
