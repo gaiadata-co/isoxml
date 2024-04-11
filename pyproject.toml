@@ -22,6 +22,5 @@ Homepage = "https://github.com/gaiadata-co/isoxml.py"
 Issues = "https://github.com/gaiadata-co/isoxml.py/issues"
 
 [tool.pytest.ini_options]
-addopts = [
-    "--import-mode=importlib",
-]
+addopts = [ "--import-mode=importlib", ]
+testpaths = ["tests"]
