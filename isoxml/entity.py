@@ -60,7 +60,7 @@ class Entity:
                 children = self.element.findall(child_tag)
 
                 if children:
-                    self.__dict__[child_tag] = [Entity(xml.etree.ElementTree.tostring(e)) for e in children]
+                    self.__dict__[child_tag.lower() + 's'] = [Entity(xml.etree.ElementTree.tostring(e)) for e in children]
         else:
             raise exception.ISOXMLParseException(f"Unknown tag {self.element.tag}")
 
