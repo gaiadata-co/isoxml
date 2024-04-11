@@ -4,12 +4,79 @@ Typical usage example:
 
 import isoxml
 
-Enitiy.init()
+Entity.init()
 entity = isoxml.Entity("<ISO11783_TaskData> ... </ISO11783_TaskData>")
 
 """
 import re
 import xml
+
+class Entity:
+    '''
+    Entity represents an ISOXML entity with its attributes and child entities
+
+    We do not create a separate class for each entity type, instead we use a single Entity class
+    and parse the XML. Based on the type of the entity and its associated spec, we populate the
+    attributes and child entities.
+
+    '''
+    def __init__(self, data):
+        self.element = xml.etree.ElementTree.fromstring(data)
+        self.parse()
+
+    @classmethod
+    def init(cls):
+        ''' Initialize the spec for the entities (REQUIRED)
+        '''
+        cls.spec = {}
+
+        for tag in tags:
+            _map = globals()[f"{tag}_map"]
+            required = globals()[f"{tag}_required"]
+            ctags = globals()[f"{tag}_ctags"]
+
+            cls.spec[tag] = {
+                "map": _map,
+                "required": required,
+                "ctags": ctags
+            }
+
+    def tag(self):
+        ''' Returns the tag of the entity (e.g. ISO11783_TaskData)'''
+        return self.element.tag
+
+    def parse(self):
+        ''' Parse the XML and populate the attributes and child entities based on the spec '''
+        if self.element.tag in Entity.spec:
+            _map = Entity.spec[self.element.tag]["map"]
+            required = Entity.spec[self.element.tag]["required"]
+            ctags = Entity.spec[self.element.tag]["ctags"]
+
+            pattern = re.compile(r'(?<!^)(?=[A-Z])')
+
+            for k, v in self.element.attrib.items():
+                if k in _map:
+                    k = _map[k]
+
+                self.__dict__[pattern.sub('_', k).lower()] = v
+
+            for k in required:
+
+                assert pattern.sub('_', k).lower() in self.__dict__, \
+                        f"Required attribute {k} not found in {self.element.tag}"
+
+            for child_tag in ctags:
+                children = self.element.findall(child_tag)
+                if children:
+                    self.__dict__[child_tag] = [Entity(e) for e in children]
+        else:
+            print(f"Unknown tag {self.element.tag}")
+
+    def __repr__(self):
+        return f"{self.element.tag} {self.__dict__}"
+
+    def __str__(self):
+        return f"{self.element.tag} {self.__dict__}"
 
 tags = [
     "AFE", "ASP", "BSN", "CAN", "CAT", "CCG", "CCL", "CCT", "CLD", "CNN",
@@ -598,76 +665,3 @@ XFR_map  = {
     "B": "Type",
 }
 XFR_ctags = []
-
-def init_spec():
-    ''' Initialize the spec for the entities (REQUIRED)'''
-    spec = {}
-
-    for tag in tags:
-        _map = globals()[f"{tag}_map"]
-        required = globals()[f"{tag}_required"]
-        ctags = globals()[f"{tag}_ctags"]
-
-        spec[tag] = {
-            "map": _map,
-            "required": required,
-            "ctags": ctags
-        }
-
-    return spec
-
-class Entity:
-    '''
-    Entity represents an ISOXML entity with its attributes and child entities
-
-    We do not create a separate class for each entity type, instead we use a single Entity class
-    and parse the XML. Based on the type of the entity and its associated spec, we populate the
-    attributes and child entities.
-
-    '''
-    def __init__(self, data):
-        self.element = xml.etree.ElementTree.fromstring(data)
-        self.parse()
-
-    @classmethod
-    def init(cls):
-        ''' Initialize the spec for the entities (REQUIRED)
-        '''
-        cls.spec = init_spec()
-
-    def tag(self):
-        ''' Returns the tag of the entity (e.g. ISO11783_TaskData)'''
-        return self.element.tag
-
-    def parse(self):
-        ''' Parse the XML and populate the attributes and child entities based on the spec '''
-        if self.element.tag in Entity.spec:
-            _map = Entity.spec[self.element.tag]["map"]
-            required = Entity.spec[self.element.tag]["required"]
-            ctags = Entity.spec[self.element.tag]["ctags"]
-
-            pattern = re.compile(r'(?<!^)(?=[A-Z])')
-
-            for k, v in self.element.attrib.items():
-                if k in _map:
-                    k = _map[k]
-
-                self.__dict__[pattern.sub('_', k).lower()] = v
-
-            for k in required:
-
-                assert pattern.sub('_', k).lower() in self.__dict__, \
-                        f"Required attribute {k} not found in {self.element.tag}"
-
-            for child_tag in ctags:
-                children = self.element.findall(child_tag)
-                if children:
-                    self.__dict__[child_tag] = [Entity(e) for e in children]
-        else:
-            print(f"Unknown tag {self.element.tag}")
-
-    def __repr__(self):
-        return f"{self.element.tag} {self.__dict__}"
-
-    def __str__(self):
-        return f"{self.element.tag} {self.__dict__}"
