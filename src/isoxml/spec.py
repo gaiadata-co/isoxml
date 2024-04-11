@@ -600,10 +600,10 @@ def init_spec():
     spec = {}
 
     for tag in tags:
-        _map = eval(f"{tag}_map")
-        required = eval(f"{tag}_required")
-        ctags = eval(f"{tag}_ctags")
-    
+        _map = globals()[f"{tag}_map"]
+        required = globals()[f"{tag}_required"]
+        ctags = globals()[f"{tag}_ctags"]
+
         spec[tag] = {
             "map": _map,
             "required": required,

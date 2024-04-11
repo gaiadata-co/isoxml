@@ -13,17 +13,17 @@ entity = isoxml.Entity(element)
 
 """
 import re
-import spec
+from isoxml import spec
 
-'''
-Entity represents an ISOXML entity with its attributes and child entities
-
-We do not create a separate class for each entity type, instead we use a single Entity class
-and parse the XML. Based on the type of the entity and its associated spec, we populate the
-attributes and child entities.
-
-'''
 class Entity:
+    '''
+    Entity represents an ISOXML entity with its attributes and child entities
+
+    We do not create a separate class for each entity type, instead we use a single Entity class
+    and parse the XML. Based on the type of the entity and its associated spec, we populate the
+    attributes and child entities.
+
+    '''
     def __init__(self, element):
         self.element = element
         self.parse()
